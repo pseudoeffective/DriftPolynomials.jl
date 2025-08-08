@@ -3,7 +3,7 @@
 
 
 # TO DO: improve Base.show overload, better cross symbol
-export can_drift, can_undrift, undrift
+# export can_drift, can_undrift, drift, undrift
 #########
 
 struct Drift
@@ -80,6 +80,13 @@ Base.:(==)(d1::Drift, d2::Drift) = d1.mtx == d2.mtx
 function Base.size(d::Drift)
   size(d.mtx)
 end
+
+# add method to Base.copy for Drift type
+function Base.copy(dc::Drift)
+  dcm = copy(dc.mtx)
+  return Drift(dcm)
+end
+
 
 
 function can_drift(dc::Drift,i::Int,j::Int)
@@ -261,12 +268,12 @@ end
 
 function nw_reset(dc::Drift)
 # returns flat diagram in drift class of dc
-   local n,m=size(dc)
+   n,m=size(dc)
 
    for i=2:n
      for j=2:m
        if can_undrift(dc,i,j)
-         local dc2=undrift(dc,i,j)
+         dc2=undrift(dc,i,j)
          return nw_reset(dc2)
        end
      end
@@ -279,13 +286,12 @@ end
 
 function se_reset(dc::Drift)
 # returns sharp diagram in drift class of dc
-   local n,m=size(dc)
+   n,m=size(dc)
 
    for i=1:n-1
      for j=1:m-1
 
        if can_drift(dc,i,j)
-         dc2=copy(dc)
          dc2=drift(dc2,i,j)
          return se_reset(dc2)
        end
@@ -296,7 +302,7 @@ function se_reset(dc::Drift)
 
 end
 
-
+#=
 function can_cancel(dc::Drift, i::Int,j::Int)
 
   if i>=size(dc)[1] || j>=size(dc)[2] return false end
@@ -362,7 +368,7 @@ function iscancelable(dc::Drift)
 
   return (cancel_all_drift(dc)==empty_drift(n))
 end
-
+=#
 
 function drift2rkmtx(dc::Drift)
 

@@ -45,15 +45,17 @@ export
 	
 	base_ring, polynomial_ring, gen, gens, nvars, vars, coefficients, evaluate, 
 
-	BPD, Drift, is_asm, drift_class, nw_reset, se_reset, drift, 
+	BPD, Drift, is_asm, drift_class, nw_reset, se_reset, 
+	
+	can_drift, can_undrift, drift, undrift,
 	
 	partition2drift, bpd2drift, drift2rkmtx, rkmtx2asm, 
 
-	isintegrable, iscancelable, random_drift, empty_drift, 
+	isintegrable, random_drift, empty_drift, 
 
 	drift_poly, markconfig, xy_ring,
 
-	draw_drift
+	draw_drift, draw_bpd
 
 
 ################################################################################
