@@ -292,7 +292,7 @@ function se_reset(dc::Drift)
      for j=1:m-1
 
        if can_drift(dc,i,j)
-         dc2=drift(dc2,i,j)
+         dc2=drift(dc,i,j)
          return se_reset(dc2)
        end
      end
