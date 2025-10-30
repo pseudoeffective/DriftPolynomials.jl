@@ -428,10 +428,39 @@ function rkmtx2asm(mtx::Matrix{<:Integer})
   return aa
 end
 
-function isintegrable(dc::Drift)
-  aa = rkmtx2asm( drift2rkmtx( dc ) )
+function is_rkmtx(mtx::Matrix{<:Integer})
+  n,m=size(mtx)
+  for (i,j) in (1:n-1,1:m-1)
+    #check monotone
+    if !(mtx[i+1,j]-mtx[i,j] in [0,1]) || !(mtx[i,j+1]-mtx[i,j] in [0,1])
+      return false
+    end
+    #check diamond condition
+    if !(mtx[i,j]+mtx[i+1,j+1]-mtx[i+1,j]-mtx[i,j+1] in [0,1])
+      return false
+    end
+  end
+  # check monotone on last row and column
+  for j=1:m-1
+    if !(mtx[n,j+1]-mtx[n,j] in [0,1])
+      return false
+    end
+  end
+  for i=1:n-1
+    if !(mtx[i+1,m]-mtx[i,m] in [0,1])
+      return false
+    end
+  end
+  return true
+end
 
-  return is_asm(aa)
+"""
+    isintegrable(dc::Drift)
+
+Check if drift configuration `dc` is integrable, i.e., comes from part of a BPD.
+"""
+function isintegrable(dc::Drift)
+  return is_rkmtx( drift2rkmtx(dc) )
 end
 
 
