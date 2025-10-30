@@ -29,7 +29,7 @@ import Nemo:
 
 # BumplessPipeDreams
 import BumplessPipeDreams:
-	 BPD, all_bpds, is_asm, draw_bpd, _draw_bpd_plots
+	 BPD, all_bpds, draw_bpd, _draw_bpd_plots
 
 # Printf 
 import Printf:
@@ -45,13 +45,13 @@ export
 	
 	base_ring, polynomial_ring, gen, gens, nvars, vars, coefficients, evaluate, 
 
-	BPD, Drift, is_asm, drift_class, nw_reset, se_reset, 
+	BPD, Drift, drift_class, nw_reset, se_reset, 
 	
 	can_drift, can_undrift, drift, undrift,
 	
-	partition2drift, bpd2drift, drift2rkmtx, rkmtx2asm, 
+	partition2drift, bpd2drift, drift2rkmtx,
 
-	isintegrable, random_drift, empty_drift, 
+	isintegrable, is_rkmtx, random_drift, empty_drift, 
 
 	drift_poly, markconfig, xy_ring,
 
