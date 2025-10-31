@@ -374,20 +374,27 @@ function drift2rkmtx(dc::Drift)
 
   n,m=size(dc)
   rkmtx = fill(0,n,m)
+  #nw corner
+  if !(dc.mtx[1,1] in [0,1])
+    rkmtx[1,1]=1
+  elseif dc.mtx[1,1]==1
+    rkmtx[1,1]=2
+  end
+
   #first row
-  for j=1:m
+  for j=2:m
     if !(dc.mtx[1,j] in [0,1])
-      rkmtx[1,j]=1
+      dc.mtx[1,j-1]==0 ? rkmtx[1,j]=1 : rkmtx[1,j]=rkmtx[1,j-1]
     elseif dc.mtx[1,j]==1
-      rkmtx[1,j]=2
+      dc.mtx[1,j-1]==0 ? rkmtx[1,j]=2 : rkmtx[1,j]=rkmtx[1,j-1]+1
     end
   end
   #first column
   for i=2:n
     if !(dc.mtx[i,1] in [0,1])
-      rkmtx[i,1]=1
+      dc.mtx[i-1,1]==0 ? rkmtx[i,1]=1 : rkmtx[i,1]=rkmtx[i-1,1]
     elseif dc.mtx[i,1]==1
-      rkmtx[i,1]=2
+      dc.mtx[i-1,1]==0 ? rkmtx[i,1]=2 : rkmtx[i,1]=rkmtx[i-1,1]+1
     end
   end
   #rest
@@ -436,7 +443,7 @@ function is_rkmtx(mtx::Matrix{<:Integer})
       return false
     end
     #check diamond condition
-    if !(mtx[i,j]+mtx[i+1,j+1]-mtx[i+1,j]-mtx[i,j+1] in [0,1])
+    if !(mtx[i,j]+mtx[i+1,j+1]-mtx[i+1,j]-mtx[i,j+1] in [-1,0,1])
       return false
     end
   end
