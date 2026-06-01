@@ -1,7 +1,7 @@
 # Tools for computing drift polynomials
 # David Anderson, May 2025.
 
-export unmarkconfig, markbox, drift_split
+export unmarkconfig, markbox, drift_split, schub_drifts
 # TO DO: review function drift2bin(d::Drift, R::DoublePolyRing) which acts like bpd2bin, records a product of binomials x[i]+y[j]
 # TO DO: review function drift_poly(d::Drift, R::DoublePolyRing) which produces the drift polynomial from the iterator
 # TO DO: clarify the logic in markbox
@@ -306,19 +306,22 @@ function unmarkconfig(dc::Drift)
 end
 
 
-# Turn this off until schur_poly is decoupled from SchubertPolynomials
-#=
+# TO DO: make sure this works now that schur_poly is decoupled from SchubertPolynomials
 
-function schub_drifts( w::Vector{Int}, R::DoublePolyRing=xy_ring( max(length(w)-1,1), max(length(w)-1,1) )[1] )
+function schub_drifts( w::Vector{Int}; double::Bool=true, ring::MPolyRing=drift_ring( max(length(w)-1,1), max(length(w)-1,1) ) )
 # compute schubert pol by drift class formula
+
+if !double || isnothing(ring)
+  ring = drift_ring( max(length(w)-1,1) )
+end
 
   fbpds = flat_bpds(w)
 
-  pol = R.ring(0)
+  pol = ring(0)
 
   for b in fbpds
     b=markconfig(b)
-    pol = pol+dc2sd(b,R)
+    pol = pol+dc2sd(b; ring=ring, double=double)
   end
 
   return pol
@@ -326,7 +329,7 @@ function schub_drifts( w::Vector{Int}, R::DoublePolyRing=xy_ring( max(length(w)-
 end
 
 
-function dc2sd( dc::Drift, R::DoublePolyRing=xy_ring( size(dc)[1], size(dc)[2] )[1]  )
+function dc2sd( dc::Drift; double::Bool=true, ring::MPolyRing=drift_ring( size(dc)[1], size(dc)[2] ) )
 # drift configuration to s-polynomial
 # must take marked configuration as input
 
@@ -336,17 +339,17 @@ function dc2sd( dc::Drift, R::DoublePolyRing=xy_ring( size(dc)[1], size(dc)[2] )
     for i=maximum([1,k-m]):minimum([n,k-1])
       if isa( dc.mtx[i,k-i], Tuple ) && dc.mtx[i,k-i][2]
         (dc1,dc2)=drift_split( dc, i, k-i )
-        return ( dc2sd( dc1, R ) + dc2sd( dc2, R ) )
+        return ( dc2sd( dc1; ring=ring, double=double ) + dc2sd( dc2; ring=ring, double=double ) )
       end
     end
   end
 
-  sd = R.ring(1)
+  sd = ring(1)
 
   tcomps = tableau_components(dc)
 
   for tt in tcomps
-    sd = sd*schur_poly( tt[1], tt[2], R; mu=tt[3], xoffset=tt[4][1], yoffset=tt[4][2], rowmin=true )
+    sd = sd*schur_poly( tt[1], tt[2]; double=double, ring=ring, mu=tt[3], xoffset=tt[4][1], yoffset=tt[4][2], rowmin=true )
   end
 
   return sd
@@ -422,8 +425,6 @@ function tableau_components(dc::Drift)
 
   return lyds
 end
-
-=#
 
 
 #=

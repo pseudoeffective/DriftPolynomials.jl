@@ -29,7 +29,13 @@ import Nemo:
 
 # BumplessPipeDreams
 import BumplessPipeDreams:
-	 BPD, all_bpds, draw_bpd, _draw_bpd_plots
+	 BPD, all_bpds, flat_bpds, isflat, draw_bpd, _draw_bpd_plots
+
+
+# SemistandardTableaux
+import SemistandardTableaux:
+	 schur_poly, ssyt_ring
+
 
 # Printf 
 import Printf:
@@ -55,7 +61,7 @@ export
 
 	drift_poly, markconfig, xy_ring,
 
-	draw_drift, draw_bpd
+	draw_drift, draw_bpd, schur_poly, flat_bpds, isflat
 
 
 ################################################################################
