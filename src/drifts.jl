@@ -276,6 +276,20 @@ function drift_class(dc::Drift)
 end
 
 
+function isflat(dc::Drift)
+  dcm = dc.mtx
+  local n=size(dcm)[1]
+
+  for i=2:n-1
+    for j=2:n-1
+      if dcm[i,j]==0 && dcm[i-1,j]!=0 && dcm[i,j-1]!=0 && dcm[i-1,j-1]==2
+         return(false)
+      end
+    end
+  end
+  return(true)
+end
+
 
 function nw_reset(dc::Drift)
 # returns flat diagram in drift class of dc
