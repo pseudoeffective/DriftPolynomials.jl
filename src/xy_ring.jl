@@ -2,6 +2,21 @@
 # David Anderson, June 2025
 
 
+"""
+    drift_ring(n, m=0; coeff=ZZ, xname=:x, yname=:y) -> MPolyRing
+
+Polynomial ring with variables x1..xn then y1..ym over `coeff` (default Nemo ZZ).
+Use `extract_vars` to recover the x- and y-families.
+"""
+function drift_ring(n::Int, m::Int=0; coeff=ZZ, xname::Symbol=:x, yname::Symbol=:y)
+    names = vcat(["$(xname)$(i)" for i in 1:n], ["$(yname)$(j)" for j in 1:m])
+    R, _ = polynomial_ring(coeff, names)
+    return R
+end
+
+# keep xy_ring for backward compatibility, but deprecate it in favor of drift_ring
+@deprecate xy_ring(n::Int, m::Int=0; kwargs...) drift_ring(n, m; kwargs...)
+
 function xy_ring(xx::Vector{String}, yy::Vector{String}; coeff::Ring=ZZ)
 
   return polynomial_ring(coeff, vcat(xx, yy))

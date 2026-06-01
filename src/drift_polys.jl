@@ -13,7 +13,7 @@ Weight monomial of a single drift configuration `d`: the product, over the empty
 boxes of `d`, of the binomials `x[i]` (single, default) or `x[i]+y[j]` (`double=true`).
 Variables are taken from `ring` by name via `extract_vars`.
 """
-function drift2bin( d::Drift; double::Bool=false, ring::MPolyRing=xy_ring( size(d)[1], size(d)[2] )[1] )
+function drift2bin( d::Drift; double::Bool=false, ring::MPolyRing=drift_ring( size(d)[1], size(d)[2] ) )
 # product of binomials for d
 # default is single polynomial, use `double=true` for double
   n,m=size(d)
@@ -58,7 +58,7 @@ Drift polynomial of `d`: the sum of `drift2bin` over every configuration in the 
 class of `d` (enumerated by `drift_class`). Keyword `double` and `ring` are forwarded to
 `drift2bin`.
 """
-function drift_poly( d::Drift; ring::MPolyRing=xy_ring( size(d)[1], size(d)[2] )[1], kwargs...  )
+function drift_poly( d::Drift; ring::MPolyRing=drift_ring( size(d)[1], size(d)[2] ), kwargs...  )
 # compute drift pol by iterator
   dc=drift_class(d)
 

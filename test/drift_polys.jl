@@ -3,7 +3,7 @@
 # --- single-configuration drift class -------------------------------------
 # When nothing can drift, the drift polynomial is just the dominant monomial of
 # the shape (row i contributes one factor of x_i per box).
-R2 = xy_ring(2)[1]
+R2 = drift_ring(2)
 x = gens(R2)
 d = partition2drift([2,1])
 @test length(collect(drift_class(d))) == 1
@@ -12,7 +12,7 @@ d = partition2drift([2,1])
 # --- genuine multi-term drift class ---------------------------------------
 # partition [2,1] flagged by [2,3] has a 5-element drift class; the drift
 # polynomial is the corresponding 5-term sum (hand-checked).
-R3 = xy_ring(3)[1]
+R3 = drift_ring(3)
 x = gens(R3)
 d = partition2drift([2,1],[2,3])
 @test length(collect(drift_class(d))) == 5
