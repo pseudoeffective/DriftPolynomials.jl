@@ -17,32 +17,6 @@ end
 # keep xy_ring for backward compatibility, but deprecate it in favor of drift_ring
 @deprecate xy_ring(n::Int, m::Int=0; kwargs...) drift_ring(n, m; kwargs...)
 
-function xy_ring(xx::Vector{String}, yy::Vector{String}; coeff::Ring=ZZ)
-
-  return polynomial_ring(coeff, vcat(xx, yy))
-
-end
-
-
-function xy_ring(xx::Vector{String}; kwargs...)
-    return xy_ring(xx, String[]; kwargs...)
-end
-
-
-function xy_ring(n::Int, m::Int; varnames::Tuple{Symbol,Symbol}=(:x,:y), coeff::Ring=ZZ)
-
-  (x,y) = varnames
-  local xvars = ["$(x)$(i)" for i=1:n]
-  local yvars = ["$(y)$(j)" for j=1:m]
-
-  return polynomial_ring(coeff, vcat(xvars, yvars))
-
-end
-
-function xy_ring(n::Int; kwargs...)
-  return xy_ring(n, 0; kwargs...)
-end
-
 
 """
     extract_vars(R::MPolyRing; varname::Symbol) -> Vector

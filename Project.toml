@@ -1,19 +1,21 @@
 name = "DriftPolynomials"
 uuid = "886e84cf-e555-43c4-aeea-17fdb735eaf9"
-authors = ["David Anderson <david.ed.anderson@gmail.com>"]
 version = "0.1.0"
+authors = ["David Anderson <david.ed.anderson@gmail.com>"]
 
 [deps]
 AbstractAlgebra = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
 BumplessPipeDreams = "23042ae9-e41c-4e47-ad99-03128c974ced"
 Nemo = "2edaba10-b0f1-5616-af89-8c11ac63239a"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+SemistandardTableaux = "4fa827a6-5f60-431e-8381-c8437c5e3c04"
 
 [compat]
 AbstractAlgebra = "0.47"
 BumplessPipeDreams = "0.1.0"
 Nemo = "0.52"
 Printf = "1.11.0"
+SemistandardTableaux = "0.1.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
