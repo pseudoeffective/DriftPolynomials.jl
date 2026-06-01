@@ -11,9 +11,6 @@ export schub_drifts
 function schub_drifts( w::Vector{Int}; double::Bool=true, ring::MPolyRing=drift_ring( max(length(w)-1,1), max(length(w)-1,1) ) )
 # compute schubert pol by drift class formula
 
-if !double || isnothing(ring)
-  ring = drift_ring( max(length(w)-1,1) )
-end
 
   fbpds = flat_bpds(w)
 
@@ -21,7 +18,7 @@ end
 
   for b in fbpds
     b=markconfig(b)
-    pol = pol+dc2sd(b; ring=ring, double=double)
+    pol = pol+dc2sd(b; double=double, ring=ring)
   end
 
   return pol
@@ -39,7 +36,7 @@ function dc2sd( dc::Drift; double::Bool=true, ring::MPolyRing=drift_ring( size(d
     for i=maximum([1,k-m]):minimum([n,k-1])
       if is_marked( dc.mtx[i,k-i] ) && collides( dc.mtx[i,k-i] )
         (dc1,dc2)=drift_split( dc, i, k-i )
-        return ( dc2sd( dc1; ring=ring, double=double ) + dc2sd( dc2; ring=ring, double=double ) )
+        return ( dc2sd( dc1;  double=double, ring=ring ) + dc2sd( dc2;  double=double, ring=ring ) )
       end
     end
   end
