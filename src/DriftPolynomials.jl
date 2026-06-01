@@ -72,6 +72,7 @@ include("drifts.jl")
 include("xy_ring.jl")
 include("drift_polys.jl") # must be included after `drifts.jl`
 include("split.jl")
+include("schub.jl") # must be included after `split.jl`
 include("draw_drift.jl")
 
 

@@ -21,6 +21,22 @@ end
 #     1000 <= x < 2000  : marked, collides=false, blocked=true
 #            x >= 2000   : marked, collides=true,  blocked=true
 
+# Helpers for decoding the marked-box integer encoding above.
+
+# A box is marked iff its entry is >= 10.
+is_marked(x::Integer) = x >= 10
+
+# A marked box collides iff it lies in the collides ranges (100..999 or >= 2000).
+collides(x::Integer) = (100 <= x < 1000) || (x >= 2000)
+
+# Drift distance recorded by a marked box: the offset above its range base.
+function drift_distance(x::Integer)
+  x >= 2000 && return x - 2000
+  x >= 1000 && return x - 1000
+  x >=  100 && return x -  100
+  x >=   10 && return x -   10
+  return x
+end
 
 
 # Symbol to integer mapping

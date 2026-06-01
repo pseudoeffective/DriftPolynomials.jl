@@ -1,6 +1,7 @@
 # Definition and functions for double polynomial rings
 # David Anderson, June 2025
 
+export drift_ring, extract_vars
 
 """
     drift_ring(n, m=0; coeff=ZZ, xname=:x, yname=:y) -> MPolyRing
