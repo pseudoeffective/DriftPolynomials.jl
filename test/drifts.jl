@@ -34,4 +34,11 @@ dc=collect(drift_class(d))
 @test length(dc)==44
 
 
+# is_rkmtx: regression for the nested-loop fix (was `for (i,j) in (1:n-1,1:m-1)`,
+# which never iterated the interior grid). A rank matrix from an integrable drift
+# is accepted; a matrix violating the interior diamond condition is rejected.
+@test is_rkmtx( drift2rkmtx( partition2drift([2,1]) ) )
+@test !is_rkmtx( Matrix( [ 0 0 0 ; 0 0 0 ; 0 0 2 ] ) )
+
+
 end

@@ -244,6 +244,15 @@ end
 
 
 
+"""
+    markconfig(dc::Drift) -> Drift
+    markconfig(bpd::BPD)   -> Drift
+
+Mark the interfering boxes of a drift configuration `dc` (or the drift configuration of a
+BPD), returning a new `Drift` whose entries use the integer marking encoding described at
+the top of `drifts.jl` (values `>=10` record each box's drift distance, collision and
+blocked status). Marking proceeds anti-diagonal by anti-diagonal via `markbox`.
+"""
 function markconfig( dc::Drift )
 # mark interfering boxes in drift config dc
 

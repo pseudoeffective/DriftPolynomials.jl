@@ -3,10 +3,10 @@ using Test
 
 
 if isempty(ARGS)
-    tests = [ 
-        "drifts.jl", 
-       # "drift_polys.jl",
-    	"draw_drifts.jl"
+    tests = [
+        "drifts.jl",
+        "drift_polys.jl",
+    	"draw_drift.jl"
 	]
 else
     tests = ARGS

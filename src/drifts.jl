@@ -10,6 +10,17 @@ struct Drift
     mtx::Matrix{<:Integer}
 end
 
+# Integer encoding of drift-configuration entries
+# ------------------------------------------------
+# 0..9 are raw tiles (0 empty box, 1 droplet, 2..6 pipe glyphs, 7 blocked droplet,
+#       8 blank, 9 marked-blocked droplet).
+# Values >= 10 are *marked* boxes produced by `markconfig`/`markbox`, encoded as a
+# base symbol plus a range that records the box's drift distance and status:
+#     10   <= x < 100   : marked, collides=false, blocked=false
+#     100  <= x < 1000  : marked, collides=true,  blocked=false
+#     1000 <= x < 2000  : marked, collides=false, blocked=true
+#            x >= 2000   : marked, collides=true,  blocked=true
+
 
 
 # Symbol to integer mapping
@@ -44,13 +55,13 @@ function int_to_symbol_drift(i::Integer)
         "\u2B27"  #10 '⬧'  
 
     ]
-    if i<10
+    if i<10            # raw tile 0..9
       return symbols[i+1]
-    elseif i<100
+    elseif i<100       # marked, collides=false  (10..99)   -> □
       return symbols[1]
-    elseif i<1000
+    elseif i<1000      # marked, collides=true   (100..999) -> ⬧
       return symbols[11]
-    else
+    else               # marked, blocked         (>=1000)   -> ■
       return symbols[8]
     end
 end
@@ -437,7 +448,7 @@ end
 
 function is_rkmtx(mtx::Matrix{<:Integer})
   n,m=size(mtx)
-  for (i,j) in (1:n-1,1:m-1)
+  for i in 1:n-1, j in 1:m-1
     #check monotone
     if !(mtx[i+1,j]-mtx[i,j] in [0,1]) || !(mtx[i,j+1]-mtx[i,j] in [0,1])
       return false
@@ -498,8 +509,21 @@ function random_drift( n::Int, m::Int=n ; extended::Bool=false)
 end
 
 
-# make drift config from partition, so that boxes can drift to rows bounded by ff
-function partition2drift( lambda::Vector{Int}, ff::Vector{Int}=fill(length(lambda),length(lambda)), n::Int=maximum( [ maximum(ff), length(lambda), lambda[1] ] )  )
+"""
+    partition2drift(lambda::Vector{Int}; ff=..., n=...)
+    partition2drift(lambda::Vector{Int}, ff::Vector{Int}, n::Int=...)
+
+Build the drift configuration with partition `lambda` placed in the NW corner, whose
+boxes drift down to the rows bounded by the flag `ff`. `n` is the side length of the
+(square) configuration. By default `ff` flags every part to the partition length and
+`n` is large enough to contain the diagram.
+
+The keyword form keeps `lambda` as the only positional argument (preferred); the
+positional form `partition2drift(lambda, ff)` is retained for back-compatibility.
+"""
+function partition2drift( lambda::Vector{Int};
+                          ff::Vector{Int}=fill(length(lambda),length(lambda)),
+                          n::Int=maximum( [ maximum(ff), length(lambda), lambda[1] ] )  )
 # drift config with lambda in NW corner
 
   local mtx = fill( Int8(8), n, n)
@@ -517,8 +541,20 @@ function partition2drift( lambda::Vector{Int}, ff::Vector{Int}=fill(length(lambd
 
 end
 
+# positional forwarder for back-compatibility (e.g. `partition2drift(la, ff)`)
+function partition2drift( lambda::Vector{Int}, ff::Vector{Int},
+                          n::Int=maximum( [ maximum(ff), length(lambda), lambda[1] ] )  )
+  return partition2drift( lambda; ff=ff, n=n )
+end
 
 
+
+"""
+    bpd2drift(bpd::BPD) -> Drift
+
+Convert a bumpless pipe dream `bpd` to its drift configuration: empty boxes (`0`) and
+droplets (`1`) are preserved, every other tile becomes the blank drift entry `8`.
+"""
 function bpd2drift( bpd::BPD )
 # generate drift config from BPD
 

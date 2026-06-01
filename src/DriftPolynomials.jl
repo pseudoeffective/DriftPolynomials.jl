@@ -16,9 +16,9 @@ module DriftPolynomials
 
 # AbstractAlgebra
 import AbstractAlgebra:
-	base_ring, gen, gens, parent_type, nvars, polynomial_ring, MPolyBuildCtx, 
-	
-	push_term!, finish
+	base_ring, gen, gens, parent_type, nvars, polynomial_ring, MPolyBuildCtx,
+
+	push_term!, finish, elem_type
 
 # Nemo
 import Nemo:
@@ -45,7 +45,7 @@ export
 	
 	base_ring, polynomial_ring, gen, gens, nvars, vars, coefficients, evaluate, 
 
-	BPD, Drift, drift_class, nw_reset, se_reset, 
+	BPD, all_bpds, Drift, drift_class, nw_reset, se_reset,
 	
 	can_drift, can_undrift, drift, undrift,
 	
